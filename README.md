@@ -23,7 +23,7 @@ after installation you can find passwords in mysql db "asterisk":
 If you want another sip numbers fix /etc/asterisk/extensions.conf in line
 ```
 [default]
-exten = _11XX,1,Dial,PJSIP/${EXTEN}
+exten = _11XX,1,Dial(PJSIP/${EXTEN})
 ```
 
 You can use zoiper for testing. Don't forget enable SRTP and TLS in zoiper client.
