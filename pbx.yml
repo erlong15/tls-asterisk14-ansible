@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars_files:
+    - defaults/main.yml
+  tasks:
+    - include: 'tasks/main.yml'
+  become: yes
+#      roles:
+#         - { role: username.rolename, x: 42 }

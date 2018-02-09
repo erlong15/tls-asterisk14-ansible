@@ -1,0 +1,6 @@
+---
+- include: epel.yml
+- include: install.yml
+- include: jansson.yml
+- include: srtp.yml
+- include: asterisk.yml
