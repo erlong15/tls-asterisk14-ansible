@@ -1,9 +1,11 @@
 ---
 - hosts: all
-  vars_files:
-    - defaults/main.yml
-  tasks:
-    - include: 'tasks/main.yml'
   become: yes
-#      roles:
-#         - { role: username.rolename, x: 42 }
+  vars_prompt:
+    - name: "mysqlpass"
+      prompt: "enter mysqlpass:"
+    - name: "keypass"
+      prompt: "enter keypass"
+
+  roles:
+    - tls_asterisk
