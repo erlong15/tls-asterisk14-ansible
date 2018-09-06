@@ -1,0 +1,58 @@
+---
+# module: Install pre-reqs
+
+- name: Disable SELINUX
+  selinux:
+    state: disabled
+
+- name: Upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+    update_cache: true
+
+- name: Install various groups of packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - '@core'
+    - '@base'
+    - "@Development tools"
+
+- name: Add Asterisk user
+  user:
+    name: asterisk
+    state: present
+    comment: "Asterisk User"
+
+
+- name: Make sure web and database services are started and enabled
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items: "{{ deploy_db }}"
+
+- name: Remove test database and access to it
+  command: 'mysql -ne "{{ item }}"'
+  with_items:
+    - DROP DATABASE test
+    - DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'
+  changed_when: False
+  ignore_errors: True
+- name: Reload privilege tables
+  command: 'mysql -ne "{{ item }}"'
+  with_items:
+    - FLUSH PRIVILEGES
+  changed_when: False
+
+- name: Create a new database with name 'asterisk'
+  mysql_db:
+      name: asterisk
+      state: present
+
+
+- name: setup mysql root password
+  command: 'mysqladmin password "{{ mysqlpass }}"'
+      
